@@ -1,0 +1,52 @@
+{% extends 'conteneurs/base.html' %}
+
+{% block titre %}Transférer un conteneur{% endblock %}
+{% block page_titre %}Transférer un conteneur{% endblock %}
+
+{% block contenu %}
+
+<div class="panel form-panel">
+    <div class="panel-header">
+        <h2>{{ conteneur.nom }}</h2>
+    </div>
+    <div class="panel-body">
+        <p style="color: var(--text-muted); margin-top: 0;">
+            Emplacement(s) actuel(s) :
+            <span class="code-cell">
+                {{ conteneur.code_emplacement }}
+            </span>
+        </p>
+
+        <form method="post" id="form-transfert">
+            {% csrf_token %}
+
+            <p>
+                <label>Type de transfert</label>
+                <select name="type_transfert" id="type_transfert" onchange="toggleZone()">
+                    <option value="interne">Transfert interne (autre zone du parc)</option>
+                    <option value="externe">Transfert externe (autre site)</option>
+                </select>
+            </p>
+
+            <p id="bloc_zone">
+                <label>Nouvelle zone</label>
+                <select name="nouvelle_zone">
+                    {% for zone in zones %}
+                        <option value="{{ zone }}">{{ zone }}</option>
+                    {% endfor %}
+                </select>
+            </p>
+
+            <button type="submit" class="btn">Confirmer le transfert</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggleZone() {
+        const type = document.getElementById('type_transfert').value;
+        document.getElementById('bloc_zone').style.display = (type === 'interne') ? 'block' : 'none';
+    }
+</script>
+
+{% endblock %}

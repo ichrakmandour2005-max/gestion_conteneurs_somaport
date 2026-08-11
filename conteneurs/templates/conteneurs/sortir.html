@@ -1,0 +1,34 @@
+{% extends 'conteneurs/base.html' %}
+
+{% block titre %}Sortir un conteneur{% endblock %}
+{% block page_titre %}Sortir un conteneur{% endblock %}
+
+{% block contenu %}
+
+<div class="panel form-panel">
+    <div class="panel-header">
+        <h2>{{ conteneur.nom }}</h2>
+    </div>
+    <div class="panel-body">
+        <p style="color: var(--text-muted); margin-top: 0;">
+            Emplacement(s) actuel(s) :
+            <span class="code-cell">
+                {{ conteneur.code_emplacement }}
+            </span>
+        </p>
+
+        <form method="post">
+            {% csrf_token %}
+            <p>
+                <label>Type de sortie</label>
+                <select name="type_sortie" required>
+                    <option value="sortie_terrestre">Sortie terrestre</option>
+                    <option value="sortie_maritime">Sortie maritime</option>
+                </select>
+            </p>
+            <button type="submit" class="btn btn-danger">Confirmer la sortie</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

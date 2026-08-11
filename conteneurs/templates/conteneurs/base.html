@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titre %}Gestion des Conteneurs{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'conteneurs/css/style.css' %}">
+</head>
+<body>
+
+<div class="app">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-mark">GC</div>
+            <div class="brand-text">Gestion<br>Conteneurs<span>Terminal Ops</span></div>
+        </div>
+
+        <div class="nav-section-label">Vue d'ensemble</div>
+        <a href="{% url 'dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+            <span class="icon">◱</span> Tableau de bord
+        </a>
+
+     <div class="nav-section-label">Opérations</div>
+<a href="{% url 'liste_conteneurs' %}" class="nav-link {% if request.resolver_match.url_name == 'liste_conteneurs' %}active{% endif %}">
+    <span class="icon">▤</span> Conteneurs
+</a>
+<a href="{% url 'ajouter_conteneur' %}" class="nav-link {% if request.resolver_match.url_name == 'ajouter_conteneur' %}active{% endif %}">
+    <span class="icon">+</span> Ajouter un conteneur
+</a>
+<a href="{% url 'plan_parc' %}" class="nav-link {% if request.resolver_match.url_name == 'plan_parc' %}active{% endif %}">
+    <span class="icon">▦</span> Plan du parc
+</a>
+<div class="nav-section-label">Statistiques</div>
+<a href="{% url 'duree_sejour' %}" class="nav-link {% if request.resolver_match.url_name == 'duree_sejour' %}active{% endif %}">
+    <span class="icon">⏱</span> Durée de séjour
+</a>
+<a href="{% url 'historique' %}" class="nav-link {% if request.resolver_match.url_name == 'historique' %}active{% endif %}">
+    <span class="icon">🗓</span> Historique
+</a>
+    </aside>
+
+    <div class="main">
+        <div class="topbar">
+            <h1>{% block page_titre %}Tableau de bord{% endblock %}</h1>
+            <div class="topbar-meta">{% now "d/m/Y — H:i" %}</div>
+        </div>
+
+        <div class="content">
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="message {{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% block contenu %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

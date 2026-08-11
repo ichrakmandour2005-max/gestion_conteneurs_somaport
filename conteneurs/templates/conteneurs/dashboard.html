@@ -1,0 +1,74 @@
+{% extends 'conteneurs/base.html' %}
+
+{% block titre %}Tableau de bord{% endblock %}
+{% block page_titre %}Tableau de bord{% endblock %}
+
+{% block contenu %}
+
+<div class="stat-grid">
+    <div class="stat-card">
+        <div class="stat-label">Conteneurs actifs</div>
+        <div class="stat-value cyan">{{ stats.total_actifs }}</div>
+        <div class="stat-sub">Dans le parc actuellement</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Entrées aujourd'hui</div>
+        <div class="stat-value green">{{ stats.entrees_jour }}</div>
+        <div class="stat-sub">Depuis 00:00</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">En transfert</div>
+        <div class="stat-value amber">{{ stats.en_transfert }}</div>
+        <div class="stat-sub">Interne + externe</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Sorties aujourd'hui</div>
+        <div class="stat-value red">{{ stats.sorties_jour }}</div>
+        <div class="stat-sub">Terrestre + maritime</div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <h2>Occupation par zone</h2>
+    </div>
+    <div class="panel-body">
+        {% for z in occupation_zones %}
+        <div class="zone-row">
+            <div class="zone-code">{{ z.zone }}</div>
+            <div class="zone-stack">
+    {% for i in z.blocs_pleins %}<div class="zone-block filled"></div>{% endfor %}
+    {% for i in z.blocs_vides %}<div class="zone-block"></div>{% endfor %}
+</div>
+            <div class="zone-stat">{{ z.occupees }} / {{ z.total }} places</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <h2>Activité récente</h2>
+        <a href="{% url 'liste_conteneurs' %}" class="btn btn-ghost btn-sm">Voir tout</a>
+    </div>
+    <table>
+        <thead>
+            <tr><th>Conteneur</th><th>Taille</th><th>Statut</th><th>Emplacement</th><th>Date</th></tr>
+        </thead>
+    <tbody>
+    {% for c in activite_recente %}
+    <tr>
+        <td class="code-cell">{{ c.nom }}</td>
+        <td>{{ c.get_taille_display }}</td>
+        <td><span class="badge badge-{{ c.statut }}">{{ c.get_statut_display }}</span></td>
+        <td class="code-cell">{{ c.code_emplacement }}</td>
+        <td>{{ c.date_entree|date:"d/m/Y H:i" }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5" class="empty-state">Aucune activité pour le moment.</td></tr>
+    {% endfor %}
+</tbody>
+    </table>
+</div>
+
+{% endblock %}

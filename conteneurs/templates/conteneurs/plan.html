@@ -1,0 +1,46 @@
+{% extends 'conteneurs/base.html' %}
+
+{% block titre %}Plan du parc{% endblock %}
+{% block page_titre %}Plan du parc{% endblock %}
+
+{% block contenu %}
+
+<div class="plan-legend">
+    <div class="plan-legend-item">
+        <div class="plan-legend-swatch" style="background: var(--surface-3);"></div> Libre
+    </div>
+    <div class="plan-legend-item">
+        <div class="plan-legend-swatch" style="background: var(--accent-cyan);"></div> Occupé — plein
+    </div>
+    <div class="plan-legend-item">
+        <div class="plan-legend-swatch" style="background: var(--accent-amber);"></div> Occupé — vide
+    </div>
+</div>
+
+{% for z in zones_data %}
+<div class="panel">
+    <div class="panel-body">
+        <div class="plan-zone-header">
+            <div class="plan-zone-title">Zone {{ z.zone }}</div>
+            <div class="plan-zone-count">{{ z.occupees }} / {{ z.total }} places occupées</div>
+        </div>
+
+        <div class="plan-grid">
+            {% for ligne in z.lignes %}
+            <div class="plan-row">
+                <div class="plan-row-label">{{ ligne.rangee }}</div>
+                {% for cellule in ligne.cellules %}
+    {% if cellule.occupe %}
+        <div class="plan-cell occupe-{{ cellule.etat }}{% if cellule.large %} large{% endif %}" title="{{ cellule.code }} — {{ cellule.conteneur }}"></div>
+    {% else %}
+        <div class="plan-cell" title="{{ cellule.code }} — Libre"></div>
+    {% endif %}
+{% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

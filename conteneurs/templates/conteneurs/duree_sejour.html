@@ -1,0 +1,52 @@
+{% extends 'conteneurs/base.html' %}
+
+{% block titre %}Durée de séjour{% endblock %}
+{% block page_titre %}Durée de séjour{% endblock %}
+
+{% block contenu %}
+
+<div class="stat-grid" style="grid-template-columns: repeat(2, 1fr);">
+    <div class="stat-card">
+        <div class="stat-label">Durée moyenne de séjour</div>
+        <div class="stat-value cyan">{{ moyenne }} j</div>
+        <div class="stat-sub">Basée sur {{ lignes|length }} séjour(s) terminé(s)</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Conteneurs sortis</div>
+        <div class="stat-value">{{ lignes|length }}</div>
+        <div class="stat-sub">Entrés et sortis</div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <h2>Détail par conteneur</h2>
+        <a href="{% url 'export_duree_sejour' %}" class="btn btn-sm">⬇ Exporter en Excel</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Taille</th>
+                <th>Date entrée</th>
+                <th>Date sortie</th>
+                <th>Durée</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for l in lignes %}
+            <tr>
+                <td class="code-cell">{{ l.conteneur.nom }}</td>
+                <td>{{ l.conteneur.get_taille_display }}</td>
+                <td>{{ l.conteneur.date_entree|date:"d/m/Y H:i" }}</td>
+                <td>{{ l.conteneur.date_sortie|date:"d/m/Y H:i" }}</td>
+                <td>{{ l.jours }} j</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="empty-state">Aucun conteneur sorti pour le moment.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

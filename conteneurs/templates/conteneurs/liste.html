@@ -1,0 +1,61 @@
+{% extends 'conteneurs/base.html' %}
+
+{% block titre %}Conteneurs{% endblock %}
+{% block page_titre %}Conteneurs{% endblock %}
+
+{% block contenu %}
+
+<div class="panel">
+    <div class="panel-header">
+        <h2>Tous les conteneurs</h2>
+        <a href="{% url 'ajouter_conteneur' %}" class="btn btn-sm">+ Ajouter un conteneur</a>
+    </div>
+
+<form method="get" style="margin-bottom: 16px; max-width: 320px;">
+    <input type="text" name="q" placeholder="Rechercher (nom ou emplacement, ex: AA01A)"
+           value="{{ q }}" style="text-transform: uppercase;">
+</form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Taille</th>
+                <th>État</th>
+                <th>Statut</th>
+                <th>Emplacement(s)</th>
+                <th>Date entrée</th>
+                <th>Date sortie</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in conteneurs %}
+            <tr>
+                <td class="code-cell">{{ c.nom }}</td>
+                <td>{{ c.get_taille_display }}</td>
+                <td>{{ c.get_etat_display }}</td>
+                <td><span class="badge badge-{{ c.statut }}">{{ c.get_statut_display }}</span></td>
+                <td class="code-cell">{{ c.code_emplacement }}</td>
+                <td>{{ c.date_entree|date:"d/m/Y H:i" }}</td>
+                <td>{{ c.date_sortie|date:"d/m/Y H:i"|default:"—" }}</td>
+                <td>
+                    {% if not c.date_sortie and c.statut != 'transfert_externe' %}
+                        <a href="{% url 'transferer_conteneur' c.id %}" class="btn btn-ghost btn-sm">Transférer</a>
+                        <a href="{% url 'sortir_conteneur' c.id %}" class="btn btn-danger btn-sm">Sortir</a>
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="8" class="empty-state">
+                <div class="icon">📦</div>
+                Aucun conteneur enregistré pour le moment.
+            </td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

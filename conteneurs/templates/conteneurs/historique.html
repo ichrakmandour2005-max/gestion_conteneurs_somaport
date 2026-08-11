@@ -1,0 +1,59 @@
+{% extends 'conteneurs/base.html' %}
+
+{% block titre %}Historique{% endblock %}
+{% block page_titre %}Historique du stock{% endblock %}
+
+{% block contenu %}
+
+<div class="panel">
+    <div class="panel-header">
+        <h2>Consulter le stock à une date donnée</h2>
+    </div>
+    <div class="panel-body">
+        <form method="get" style="display: flex; gap: 12px; align-items: end; max-width: 400px;">
+            <div style="flex: 1;">
+                <label>Date</label>
+                <input type="date" name="date" value="{{ date_str }}" required>
+            </div>
+            <button type="submit" class="btn" style="height: 41px;">Rechercher</button>
+        </form>
+        {% if erreur %}<p style="color: var(--accent-red); margin-top: 12px;">{{ erreur }}</p>{% endif %}
+    </div>
+</div>
+
+{% if date_str and not erreur %}
+<div class="panel">
+    <div class="panel-header">
+        <h2>Stock au {{ date_str }}</h2>
+        <span class="topbar-meta">{{ conteneurs|length }} conteneur(s)</span>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Taille</th>
+                <th>État</th>
+                <th>Emplacement</th>
+                <th>Date entrée</th>
+                <th>Date sortie</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in conteneurs %}
+            <tr>
+                <td class="code-cell">{{ c.nom }}</td>
+                <td>{{ c.get_taille_display }}</td>
+                <td>{{ c.get_etat_display }}</td>
+                <td class="code-cell">{{ c.code_emplacement }}</td>
+                <td>{{ c.date_entree|date:"d/m/Y H:i" }}</td>
+                <td>{{ c.date_sortie|date:"d/m/Y H:i"|default:"—" }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="empty-state">Aucun conteneur présent à cette date.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+{% endblock %}

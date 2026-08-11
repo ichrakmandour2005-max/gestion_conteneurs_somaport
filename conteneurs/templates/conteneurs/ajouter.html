@@ -1,0 +1,21 @@
+{% extends 'conteneurs/base.html' %}
+
+{% block titre %}Ajouter un conteneur{% endblock %}
+{% block page_titre %}Ajouter un conteneur{% endblock %}
+
+{% block contenu %}
+
+<div class="panel form-panel">
+    <div class="panel-header">
+        <h2>Nouveau conteneur</h2>
+    </div>
+    <div class="panel-body">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn">Enregistrer et placer</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
